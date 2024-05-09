@@ -9,7 +9,6 @@ import argparse
 def load_image(image_path, default_size):
     """
     Загружает изображение с помощью OpenCV в формате BGR.
-    Если изображение не удалось загрузить, создает черное изображение.
 
     Args:
         image_path (str): Путь к изображению.
@@ -19,11 +18,6 @@ def load_image(image_path, default_size):
         Image: Изображение в формате PIL.
     """
     image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
-
-    if image_bgr is None:
-        black_image = Image.new('RGB', default_size, (0, 0, 0))
-        return black_image
-
     image_pil = Image.fromarray(cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB))
     image_pil.thumbnail(default_size)
     return image_pil
