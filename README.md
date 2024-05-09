@@ -1,7 +1,7 @@
 # WB_Multimodal_Embeddings
 ### 1. **Структура Репозитория**
 ```
-your_project/
+WB_Multimodal_Embeddings/
 │
 ├── data/                   # Директория для хранения данных
 │   ├── raw/                # Исходные данные
