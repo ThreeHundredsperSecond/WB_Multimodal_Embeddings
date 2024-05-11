@@ -30,4 +30,40 @@ python data_preprocessing.py --file_path <path_to_parquet_file> --base_image_pat
 python train_model.py --file_path <path_to_parquet_file> --base_image_path <path_to_images> --processed_data_path <path_to_processed_csv> --model_save_path <path_to_save_model> --project_name fine-tuning-ruclip --num_epochs 2 --batch_size 32 --lr 1e-6
 ```
 
+**3. Скрипт `generate_embeddings.py`:**
+
+Этот скрипт предназначен для генерации эмбеддингов текста и изображений, используя предварительно обученную модель ruCLIP или её дообученную версию. Он выполняет следующие задачи:
+
+- Загружает базовую модель ruCLIP или использует указанную дообученную модель.
+- Инициализирует предсказатель ruCLIP для генерации эмбеддингов.
+- Загружает данные из CSV-файла, который должен содержать колонки 'title' и 'image_path'.
+- Последовательно обрабатывает данные, генерируя эмбеддинги для текстов и изображений.
+- Сохраняет полученные эмбеддинги в файл формата NPZ.
+
+### Классы и Методы
+
+- **`EmbeddingPipeline`**:
+  - **Инициализация**:
+    - Загружает модель ruCLIP, настраивает устройство для вычислений (CPU или GPU).
+    - Если указан путь к дообученной модели, загружает её веса.
+  - **`TextDataset`**: Подкласс для создания датасета из текстов и путей к изображениям.
+  - **`get_embeddings`**: Обрабатывает данные пакетами, извлекая эмбеддинги для текста и соответствующих изображений.
+
+- **`generate_embeddings`**:
+  - Генерирует эмбеддинги, используя экземпляр `EmbeddingPipeline`.
+  - Сохраняет эмбеддинги в указанный файл.
+
+### Пример использования:
+
+```bash
+python generate_embeddings.py \
+    --fine_tuned_model_path <path_to_fine_tuned_model> \
+    --processed_data_csv <path_to_processed_data_csv> \
+    --output_path <path_to_save_embeddings> \
+    --batch_size 32
+```
+
+
+
+
 
