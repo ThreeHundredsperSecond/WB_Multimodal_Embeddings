@@ -46,8 +46,6 @@ def run_pipeline(parquet_file, raw_images_dir, processed_data_dir, processed_ima
 
     # Обучение модели
     train_model(
-        file_path=parquet_file,
-        base_image_path=raw_images_dir,
         processed_data_path=processed_data_csv,
         model_save_path=model_save_dir,
         project_name=project_name,
