@@ -48,14 +48,14 @@ def resize_images(image_paths, output_directory, default_size):
     print("Все изображения обработаны и сохранены.")
 
 
-def load_and_process_data(file_path, base_image_path):
+def load_and_process_data(file_path, output_directory):
     """
     Загружает данные из файла Parquet, удаляет строки с отсутствующими заголовками,
     удаляет лишние пробелы и строки с пропущенными описаниями, а также удаляет изображения с определенным идентификатором.
 
     Args:
         file_path (str): Путь к файлу Parquet.
-        base_image_path (str): Базовый путь к директории с изображениями.
+        output_directory (str): Базовый путь к директории с изображениями.
 
     Returns:
         DataFrame: Обработанный DataFrame с данными.
@@ -73,7 +73,7 @@ def load_and_process_data(file_path, base_image_path):
     df = remove_space(df)
 
     def convert_to_path(num):
-        return f'{base_image_path}/{num}.jpg'
+        return f'{output_directory}\\{num}.jpg'
 
     df['image_path'] = df['nm'].apply(convert_to_path)
 
@@ -96,7 +96,7 @@ def prepare_data_and_images(file_path, base_image_path, processed_data_path, pro
     """
     os.makedirs(processed_data_path, exist_ok=True)
 
-    data = load_and_process_data(file_path, base_image_path)
+    data = load_and_process_data(file_path,  processed_images_path)
     resize_images(data['image_path'].tolist(),
                   processed_images_path, default_image_size)
 
