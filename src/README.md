@@ -53,7 +53,7 @@ python data_preprocessing.py --file_path <path_to_parquet_file> --base_image_pat
 
 **Пример использования:**
 ```bash
-python train_model.py --file_path <path_to_parquet_file> --base_image_path <path_to_images> --processed_data_path <path_to_processed_csv> --model_save_path <path_to_save_model> --project_name fine-tuning-ruclip --num_epochs 2 --batch_size 32 --lr 1e-6
+python train_model.py --processed_data_path "\processed_data.csv" --model_save_path "\tests_path" --project_name "My_ruCLIP_Project" --num_epochs 1 --batch_size 8 --lr 1e-5
 ```
 
 **3. Скрипт `generate_embeddings.py`:**
