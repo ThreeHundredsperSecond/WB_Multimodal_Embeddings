@@ -7,7 +7,7 @@ from torchvision.transforms import Compose
 from PIL import Image
 from tqdm import tqdm
 from datetime import datetime
-import wandb
+#import wandb
 import argparse
 import ruclip
 import pandas as pd
@@ -69,7 +69,7 @@ def collate_fn(batch):
     return images, texts
 
 
-def create_dataloader(processor, list_image_path, list_txt, batch_size, shuffle=True, num_workers=-1):
+def create_dataloader(processor, list_image_path, list_txt, batch_size, shuffle=True, num_workers=0):
     """
     Создает DataLoader для набора данных ImageTitleDataset.
 
@@ -108,13 +108,11 @@ def load_and_process_data(processed_data_path):
     return df
 
 
-def train_model(file_path, base_image_path, processed_data_path, model_save_path, project_name, num_epochs=2, batch_size=32, lr=1e-6):
+def train_model(processed_data_path, model_save_path, project_name, num_epochs=2, batch_size=32, lr=1e-6):
     """
     Обучает модель ruCLIP на данных.
 
     Args:
-        file_path (str): Путь к файлу Parquet.
-        base_image_path (str): Базовый путь к изображениями.
         processed_data_path (str): Путь к обработанным данным.
         model_save_path (str): Директория для сохранения обученной модели.
         project_name (str): Название проекта для wandb.
@@ -131,8 +129,8 @@ def train_model(file_path, base_image_path, processed_data_path, model_save_path
 
     dataloader = create_dataloader(processor, list_image_path, list_txt, batch_size)
 
-    wandb.login()
-    run = wandb.init(project=project_name, name=f"training-ruclip-{num_epochs}epoch")
+    #wandb.login()
+    #run = wandb.init(project=project_name, name=f"training-ruclip-{num_epochs}epoch")
 
     clip.to(device)
     optimizer = optim.Adam(clip.parameters(), lr=lr, betas=(0.9, 0.999), eps=1e-6, weight_decay=0.01)
@@ -164,7 +162,7 @@ def train_model(file_path, base_image_path, processed_data_path, model_save_path
             current_time = datetime.now().strftime("%H:%M:%S")
             current_lr = scheduler.get_last_lr()[0]
 
-            wandb.log({"Epoch": epoch + 1, "Batch": i + 1, "Loss": total_loss.item(), "Time": current_time, "LR": current_lr, "BS": batch_size})
+            #wandb.log({"Epoch": epoch + 1, "Batch": i + 1, "Loss": total_loss.item(), "Time": current_time, "LR": current_lr, "BS": batch_size})
 
             pbar.set_description(f"Epoch {epoch + 1}/{num_epochs}, Batch {i + 1}/{len(dataloader)}, Loss: {total_loss.item():.6f}, LR: {current_lr:.7f}, Time: {current_time}")
 
@@ -174,13 +172,11 @@ def train_model(file_path, base_image_path, processed_data_path, model_save_path
             'optimizer_state_dict': optimizer.state_dict()
         }, os.path.join(model_save_path, f'ruCLIP_model_epoch{epoch + 1}.pth'))
 
-    run.finish()
+    #run.finish()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Training script for ruCLIP model')
-    parser.add_argument('--file_path', type=str, required=True, help='Path to the input Parquet file')
-    parser.add_argument('--base_image_path', type=str, required=True, help='Base path for raw images')
     parser.add_argument('--processed_data_path', type=str, required=True, help='Path to the directory for processed data')
     parser.add_argument('--model_save_path', type=str, required=True, help='Path to the directory for saving trained model')
     parser.add_argument('--project_name', type=str, default='fine-tuning-ruclip', help='Project name for wandb')
@@ -191,8 +187,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     train_model(
-        file_path=args.file_path,
-        base_image_path=args.base_image_path,
         processed_data_path=args.processed_data_path,
         model_save_path=args.model_save_path,
         project_name=args.project_name,
