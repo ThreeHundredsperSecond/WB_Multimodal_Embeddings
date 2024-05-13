@@ -18,7 +18,8 @@ def load_image(image_path, default_size):
         Image: Изображение в формате PIL.
     """
     image_bgr = cv2.imread(image_path, cv2.IMREAD_COLOR)
-    image_pil = Image.fromarray(cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB))
+    # Преобразование numpy массива в PIL Image
+    image_pil = Image.fromarray(image_bgr)
     image_pil.thumbnail(default_size)
     return image_pil
 
