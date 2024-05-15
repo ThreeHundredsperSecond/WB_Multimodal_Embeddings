@@ -12,7 +12,6 @@ warnings.filterwarnings("ignore")
 # Документация `compute_metrics_mlp_multiclass.py`
 
 
-
 class ContentClassifier:
     def __init__(self, n_splits=5):
         self.n_splits = n_splits
