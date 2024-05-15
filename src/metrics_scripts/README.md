@@ -129,7 +129,7 @@ python compute_metrics_mlp_binary.py --model_names "model1" --emb_path "D:\\rucl
 ### Пример использования
 
 ```bash
-python compute_metrics_multiclass_logreg.py --model_names model1 model2 --emb_path path/to/embeddings1.npz path/to/embeddings2.npz --tasks Task1 Task2 --dfs path/to/task1_labels.csv path/to/task2_labels.csv --save_path path/to/results.csv
+python compute_metrics_multiclass_logreg.py --model_names "model1" --emb_path "ruclip-vit-base-patch32-384_embeddings.npz" --tasks "task1" --dfs "testy_cat.csv" --save_path "results.csv"
 ```
 
 Этот пример произведет вычисление метрик для двух моделей (`model1` и `model2`) на основе данных, содержащихся в файлах эмбеддингов и меток для двух задач (`Task1` и `Task2`). Результаты будут сохранены в файл `path/to/results.csv`.
