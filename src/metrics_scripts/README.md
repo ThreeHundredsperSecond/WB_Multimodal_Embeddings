@@ -238,7 +238,7 @@ male_female_df = prepare_male_female_dataset(test_df)
 
 Пример использования:
 ```bash
-python script.py --input_file test_data.csv --output_file multiclass_labels.csv
+python prepare_multiclass_dataset.py --df_paths data1.csv data2.csv --embedding_file D:\wb\emb\ruclip-vit-base-patch32-384_embeddings.npz --output_filenames y1.csv y2.csv
 ```
 
 Этот скрипт может быть полезен для подготовки набора данных для задачи многоклассовой классификации, где целевая переменная имеет множество категорий. Он уменьшает количество классов, заменяя редкие значения 'sub_category' на соответствующие значения 'category', и преобразует категориальные метки в числовые с помощью `LabelEncoder`. Результирующий DataFrame сохраняется в файл CSV для дальнейшего использования в задаче многоклассовой классификации.
