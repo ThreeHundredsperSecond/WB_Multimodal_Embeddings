@@ -169,8 +169,7 @@ python compute_metrics_multiclass_logreg.py --model_names "model1" --emb_path "r
 
 Пример использования:
 ```python
-test_df = pd.read_csv('test_data.csv')
-is_child_df = prepare_adult_child_dataset(test_df)
+ prepare_adult_child_dataset.py --input_file test_data.csv --output_file result.csv
 ```
 
 Этот скрипт может быть полезен для подготовки набора данных для задачи классификации одежды на взрослую и детскую на основе текстовых описаний.
@@ -201,8 +200,7 @@ is_child_df = prepare_adult_child_dataset(test_df)
 
 Пример использования:
 ```python
-test_df = pd.read_csv('test_data.csv')
-male_female_df = prepare_male_female_dataset(test_df)
+python prepare_male_female_dataset.py --input_file test_data.csv --output_file result.csv
 ```
 
 Этот скрипт может быть полезен для подготовки набора данных для задачи классификации одежды на мужскую и женскую на основе текстовых описаний. Он фильтрует одежду, используя ключевые слова, связанные с мужской и женской одеждой, и создает целевые метки для обучения модели классификации.
