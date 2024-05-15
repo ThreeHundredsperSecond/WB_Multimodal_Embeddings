@@ -58,7 +58,7 @@ def calculate_metrics(X_text, X_img, y):
 
     scaler = StandardScaler()
     X_combined = np.concatenate([X_text, X_img], axis=1)
-    X_pca = PCA(n_components=min(512, X_combined.shape[1])).fit_transform(scaler.fit_transform(X_combined))
+    X_pca = PCA(n_components=min(10, X_combined.shape[1])).fit_transform(scaler.fit_transform(X_combined))
 
     datasets = [X_text, X_img, X_combined, X_pca]
 
@@ -91,12 +91,12 @@ def get_metrics(emb_path, tasks, df_paths, save_path, model_names):
             metrics_results = calculate_metrics(X_text, X_img, y)
 
             for data_type, metrics in metrics_results.items():
-                result_df = result_df.append({
-                    'Model': model_name,
-                    'Task': task,
-                    'Data Type': data_type,
-                    **metrics
-                }, ignore_index=True)
+                result_df = pd.concat([result_df, pd.DataFrame({
+                                                                'Model': [model_name],
+                                                                'Task': [task],
+                                                                'Data Type': [data_type],
+                                                                **metrics
+                                                            })], ignore_index=True)
 
             progress_bar.update(1)
 
