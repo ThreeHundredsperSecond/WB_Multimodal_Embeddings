@@ -55,7 +55,7 @@ python compute_metrics_logreg.py --emb_path "path/to/embeddings1.npz path/to/emb
 ### Пример использования
 
 ```bash
-python compute_metrics_mlp_binary.py --model_names model1 model2 --emb_path path/to/embeddings1.npz path/to/embeddings2.npz --tasks Task1 Task2 --dfs path/to/task1_labels.csv path/to/task2_labels.csv --save_path path/to/results.csv --average binary
+python compute_metrics_mlp_binary.py --model_names "model1" --emb_path "D:\\ruclip-vit-base-patch32-384_embeddings.npz" --tasks "task1" --df_paths "D:\male_famele.csv" --save_path "D:\scripts\test\results.csv"
 ```   
 
 В этом примере скрипт вычислит метрики для двух задач (`Task1` и `Task2`), используя данные из соответствующих файлов эмбеддингов и меток классов. Результаты будут сохранены в `path/to/results.csv`.
