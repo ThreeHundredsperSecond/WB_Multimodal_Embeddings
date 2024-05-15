@@ -1,55 +1,63 @@
+import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
+from tqdm import tqdm
+import argparse
 
-def replace_subcategory(df):
-    # Создание копии DataFrame
-    df_modified = df.copy()
+def create_and_save_labels(df, embedding_file, output_filename):
+    """
+    Создает метки классов для DataFrame, выбирая embeddings по индексам из DataFrame,
+    и сохраняет метки в CSV файл.
 
-    # Группировка по sub_category и подсчет количества строк в каждой группе
-    counts = df_modified.groupby('sub_category').size()
+    Args:
+        df (pd.DataFrame): DataFrame с индексами и метками классов.
+        embedding_file (str): Путь к файлу с embeddings.
+        output_filename (str): Имя CSV файла для сохранения меток.
+    """
 
-    # Получение списка sub_category, где количество строк меньше 11
-    sub_categories_to_replace = counts[counts < 11].index.tolist()
+    # Загрузка embeddings
+    embeddings = np.load(embedding_file)
+    text_embeddings = embeddings['text']
+    img_embeddings = embeddings['img']
 
-    # Замена sub_category на category для подходящих групп
-    for sub_category in sub_categories_to_replace:
-        category_value = df_modified.loc[df_modified['sub_category'] == sub_category, 'category'].iloc[0]
-        df_modified.loc[df_modified['sub_category'] == sub_category, 'sub_category'] = category_value
-
-    return df_modified
-
-def prepare_multiclass_dataset(test_df):
-    # Замена sub_category на основе их встречаемости
-    sub_df = replace_subcategory(test_df)
-
-    # Создание экземпляра LabelEncoder
+    # Создание LabelEncoder
     label_encoder = LabelEncoder()
 
-    # Преобразование категориальных меток в числовые
-    y_sub = label_encoder.fit_transform(sub_df['sub_category'])
+    # Проверка наличия столбца "target"
+    if 'target' not in df.columns:
+        raise ValueError("DataFrame must include a 'target' column.")
 
-    # Создаем DataFrame для сохранения
-    multiclass_df = pd.DataFrame({
-        'index': sub_df.index,
-        'target': y_sub
+    # Преобразование меток классов в числовые
+    y = label_encoder.fit_transform(df['target'])
+
+    # Выборка embeddings по индексам из DataFrame
+    X_text = text_embeddings[df['index'].values]
+    X_img = img_embeddings[df['index'].values]
+
+    # Создание DataFrame для меток классов
+    df_y = pd.DataFrame({
+        'index': df.index,
+        'target': y
     })
 
-    return multiclass_df
+    # Сохранение меток в CSV файл
+    df_y.to_csv(output_filename, index=False)
+    print(f"Labels saved to {output_filename}")
 
 if __name__ == "__main__":
-    import argparse
-
-    parser = argparse.ArgumentParser(description="Prepare Multiclass dataset")
-    parser.add_argument('--input_file', type=str, required=True, help='Path to the test dataframe file')
-    parser.add_argument('--output_file', type=str, required=True, help='Path to save the resulting CSV file')
+    parser = argparse.ArgumentParser(description='Создает метки классов для DataFrame и сохраняет их в CSV файл.')
+    parser.add_argument('--df_paths', nargs='+', required=True, help='Пути к CSV файлам с данными.')
+    parser.add_argument('--embedding_file', type=str, required=True, help='Путь к файлу с embeddings.')
+    parser.add_argument('--output_filenames', nargs='+', required=True, 
+                        help='Имена CSV файлов для сохранения меток. Количество имен должно совпадать с количеством DataFrame.')
 
     args = parser.parse_args()
 
-    # Загрузка тестового DataFrame
-    test_df = pd.read_csv(args.input_file)
+    # Проверка количества аргументов
+    if len(args.df_paths) != len(args.output_filenames):
+        raise ValueError("Количество путей к CSV файлам должно совпадать с количеством имен выходных файлов.")
 
-    # Подготовка данных
-    result_df = prepare_multiclass_dataset(test_df)
-
-    # Сохранение результата
-    result_df.to_csv(args.output_file, index=False)
+    # Обработка каждого DataFrame
+    for df_path, output_filename in zip(args.df_paths, args.output_filenames):
+        df = pd.read_csv(df_path)
+        create_and_save_labels(df, args.embedding_file, output_filename)
