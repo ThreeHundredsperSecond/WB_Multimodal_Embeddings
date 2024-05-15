@@ -11,7 +11,7 @@ def run_compute_metrics_script(script_path, model_names, emb_paths, tasks, dfs, 
     command = [
         'python', script_path,
         '--model_names', *model_names,
-        '--emb_path', *emb_paths,
+        '--emb_paths', *emb_paths,
         '--tasks', *tasks,
         '--dfs', *dfs,
         '--save_path', save_path
