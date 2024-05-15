@@ -77,4 +77,4 @@ WB_Multimodal_Embeddings/
 | **brend** | Имя бренда производителя товара |
 
 
-[Логированные эспирименты](https://wandb.ai/wb-project/fine-tuning-ruclip?nw=nwuserchumachenkovladislav)
+[Логированный эксперимент](https://wandb.ai/wb-project/fine-tuning-ruclip?nw=nwuserchumachenkovladislav)
