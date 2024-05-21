@@ -16,7 +16,8 @@ WB_Multimodal_Embeddings/
 ├── models/                                       # Директория для сохранения обученных моделей
 │
 ├── notebooks/                                    # Jupyter notebooks для исследования и прототипирования
-│   └── main_notebook.ipynb                       # Основной ноутбук
+│   ├── main_notebook.ipynb                       # Основной ноутбук
+│   └── onnx_notebook.ipynb                       # Ноутбук для работы с ONNX
 │
 ├── src/                                          # Исходный код для пайплайна
 │   ├── __init__.py
