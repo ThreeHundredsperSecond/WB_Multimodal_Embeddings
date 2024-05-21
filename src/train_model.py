@@ -11,7 +11,20 @@ from datetime import datetime
 import argparse
 import ruclip
 import pandas as pd
+import os
+import random
+import numpy as np
 
+
+
+# Установка сидов для воспроизводимости
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(42)
+
+# Остальной код скрипта ...
 
 class ImageTitleDataset:
     def __init__(self, processor, list_image_path, list_txt):
